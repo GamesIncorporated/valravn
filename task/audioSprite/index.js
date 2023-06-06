@@ -3,14 +3,13 @@ const fs = require('fs')
 const ffmpeg = require('ffmpeg')
 audiosprite = require('audiosprite');
 
-function start(args) {
-    return function start() {
+start = (args) => {
+    return async function start() {
+        if(args.length === 0) return console.error("Enter your game name. e.g: gulp createAudioSprite --gi_019_cfs")
         const gameName = cleanUpArgs(args);
         const filePath = createPath(gameName);
         const files = prepareFiles(filePath);
         makeAudio(files);
-        
-        return Promise.resolve()
     }
 }
 
@@ -19,7 +18,7 @@ cleanUpArgs = (args) => {
 }
 
 createPath = (gameName) => {
-    return `../${gameName}/assets/audio`
+    return `../${gameName}/assets/audio/`
 }
 
 prepareFiles = (files) => {
@@ -29,12 +28,20 @@ prepareFiles = (files) => {
 
 makeAudio = (files) => {
     console.log("Generating Files")
-    audiosprite(files, {output: 'result', export: '.mp3'}, (err, obj) => {
-        console.log(files)
+    audiosprite(files, setOptions(), (err, obj) => {
         if (err) return console.error(err);
-        // fs.writeFile('./tasks/audioSprite')
-        return console.log(JSON.stringify(obj, null, 2))
+        fs.writeFileSync('./task/audioSprite/audioAtlas.json', JSON.stringify(obj, null, 2), err => err && console.error(err)) 
     })
+}
+
+setOptions = () => {
+    return options = {
+        output: "./task/audioSprite/generatedAudio",
+        path: 'audioSprite',
+        format: 'howler2',
+        export: 'ogg,mp3',
+        bitrate: 70,
+      }
 }
 
 module.exports = { start };
