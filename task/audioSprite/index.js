@@ -1,5 +1,5 @@
 const fs = require('fs')
-const path = require('path')
+// const path = require('path')
 const ffmpeg = require('ffmpeg')
 audiosprite = require('audiosprite');
 
@@ -7,7 +7,7 @@ function start(args) {
     return function start() {
         const gameName = cleanUpArgs(args);
         const filePath = createPath(gameName);
-        const files = prepareFiles(fs.readdirSync(filePath));
+        const files = prepareFiles(filePath);
         makeAudio(files);
         
         return Promise.resolve()
@@ -22,15 +22,17 @@ createPath = (gameName) => {
     return `../${gameName}/assets/audio`
 }
 
-prepareFiles = (filePath) => {
-    return filePath.filter(file => file.includes('.mp3')).map(x => x = filePath + x);
+prepareFiles = (files) => {
+    return fs.readdirSync(files).filter(file => file.includes('.mp3'))
+    .map(x => x = files + x);
 }
 
-makeAudio = (files, path) => {
+makeAudio = (files) => {
     console.log("Generating Files")
-    // console.log(spawn('ffmpeg'))
-    audiosprite([files[0], files[1]], {}, (err, obj) => {
+    audiosprite(files, {output: 'result', export: '.mp3'}, (err, obj) => {
+        console.log(files)
         if (err) return console.error(err);
+        // fs.writeFile('./tasks/audioSprite')
         return console.log(JSON.stringify(obj, null, 2))
     })
 }
