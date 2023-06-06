@@ -18,6 +18,8 @@
     "audiosprite": "^0.7.2",
     "convert-excel-to-json": "^1.7.0",
     "del": "^7.0.0",
+    "ffmpeg": "^0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
     "gulp": "^4.0.2",
     "local-web-server": "^4.2.0"
   }
