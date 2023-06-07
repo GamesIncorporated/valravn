@@ -39,13 +39,13 @@ parseFilesToJson = (files, filePath, jsonFile) => {
         fileData.audio = []; 
 
         for (i = 0; i < files.length; i += 2) {
-            audioPair = {'id': files[i], 'src': files[i + 1]};
 
             if (!files[i + 1].includes('.ogg')) {
                 throw new Error(`Missing .ogg file for ${files[i]}`);
             } else if (!files[i].includes('.mp3')) {
                 throw new Error(`Missing .mp3 file for ${files[i + 1]}`);
             }
+            audioPair = {'id': files[i].replace('.mp3', ''), 'src': files[i + 1]};
 
             fileData.audio.push(audioPair);
         }
