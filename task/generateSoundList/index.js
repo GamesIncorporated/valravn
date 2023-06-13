@@ -46,12 +46,21 @@ parseFilesToJson = (files, filePath, jsonFile) => {
                 throw new Error(`Missing .mp3 file for ${files[i + 1]}`);
             }
             audioPair = {'id': files[i].replace('.mp3', ''), 'src': files[i + 1]};
-
             fileData.audio.push(audioPair);
         }
 
-        fs.writeFileSync(jsonFile, JSON.stringify(fileData, 0, 2), err => err && console.log(err));
+        fs.writeFileSync(jsonFile, drawObject(fileData.audio), err => err && console.log(err));
     });
+}
+
+drawObject = (audioFiles) => {
+    let newObject = {
+        group: "default",
+        audioPath: './assets/audio/',
+        audio: audioFiles
+    };
+
+    return JSON.stringify(newObject, null, 2);
 }
 
 module.exports = { writeSoundList };

@@ -3,11 +3,13 @@ audiosprite = require('audiosprite');
 
 start = (args) => {
     return async function start() {
-        if(args.length === 0) return console.error("Enter your game name. e.g: gulp createAudioSprite --gi_019_cfs");
+        if(args.length === 0) throw new Error("Enter your game name. e.g: gulp createAudioSprite --gi_019_cfs");
         const gameName = cleanUpArgs(args);
         const filePath = createPath(gameName);
         const files = prepareFiles(filePath);
-        generateAudio(files);
+        const gameAudioFilePath = getAudioFilePath(gameName);
+        const jsonFilePath = findJson(gameName);
+        generateAudio(files, jsonFilePath, gameAudioFilePath);
     }
 }
 
@@ -25,17 +27,44 @@ prepareFiles = (files) => {
     .map(x => x = files + x);
 }
 
-generateAudio = (files) => {
-    console.log("Generating Files")
-    audiosprite(files, setOptions(), (err, obj) => {
+getAudioFilePath = (gameName) => {
+    return `../${gameName}/assets/audioSprite/`;
+}
+
+findJson = (gameName) => {
+    return `../${gameName}/json/web/audio/audio.json`;
+}
+
+generateAudio = (files, jsonFile, audioPath) => {
+    audiosprite(files, setOptions(audioPath), (err, obj) => {
         if (err) return console.error(err);
-        fs.writeFileSync('./task/audioSprite/audioAtlas.json', JSON.stringify(obj, null, 2), err => err && console.error(err));
+        fs.writeFileSync(jsonFile, drawObject(obj), err => { if (err) throw new Error(err) });
     })
 }
 
-setOptions = () => {
+drawObject = (obj) => {
+    let newObject = {
+        group: "default",
+        audioPath: './assets/audioSprite/',
+        audio: [
+            {
+                id: [...obj.src[1].replace('.mp3', '')]
+                    .splice(obj.src[1].indexOf('\\') + 1)
+                    .join(''),
+                src: [...obj.src[0]]
+                    .splice(obj.src[0].indexOf('\\') + 1)
+                    .join('')
+            }
+        ],
+        sprite: obj.sprite,
+    };
+
+    return JSON.stringify(newObject, null, 2);
+}
+
+setOptions = (audioPath) => {
     return options = {
-        output: "./task/audioSprite/generatedAudio",
+        output: audioPath + '/generatedAudio',
         path: 'audioSprite',
         format: 'howler2',
         export: 'ogg,mp3',
