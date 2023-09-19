@@ -43,7 +43,7 @@ generateAudio = (files, jsonFile, audioPath) => {
 }
 
 drawObject = (obj) => {
-    let newObject = {
+    const newObject = {
         group: "default",
         audioPath: './assets/audioSprite/',
         audio: [
