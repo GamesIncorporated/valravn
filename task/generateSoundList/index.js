@@ -5,9 +5,11 @@ writeSoundList = (args) => {
         if(args.length === 0) throw new Error("Enter your game name. e.g: gulp generateSoundList --gi_019_cfs");
 
         const gameName = cleanUpArgs(args);
-        const filePath = createPath(gameName);
+        const filePath = `../${gameName}/assets/audio/`;
         const files    = getFiles(filePath);
         const jsonFile = findJson(gameName);
+        console.log(gameName + " " + filePath + " " + jsonFile);
+
         
         parseFilesToJson(files, filePath, jsonFile);
     }
@@ -40,11 +42,12 @@ parseFilesToJson = (files, filePath, jsonFile) => {
 
         for (i = 0; i < files.length; i += 2) {
 
-            if (!files[i + 1].includes('.ogg')) {
-                throw new Error(`Missing .ogg file for ${files[i]}`);
-            } else if (!files[i].includes('.mp3')) {
-                throw new Error(`Missing .mp3 file for ${files[i + 1]}`);
-            }
+            // if (!files[i + 1].includes('.ogg')) {
+            //     // throw new Error(`Missing .ogg file for ${files[i]}`);
+            // } else if (!files[i].includes('.mp3')) {
+
+            //     // throw new Error(`Missing .mp3 file for ${files[i + 1]}`);
+            // }
             audioPair = {'id': files[i].replace('.mp3', ''), 'src': files[i + 1]};
             fileData.audio.push(audioPair);
         }

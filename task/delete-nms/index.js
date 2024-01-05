@@ -10,7 +10,7 @@ deleteModules = (args) => {
 }
 
 clearEngines = (game) => {
-    const engines = ['titan', 'hyperion', 'ymir', game]
+    const engines = ['titan', 'hyperion', 'ymir', game];
     for (const engine of engines) {
         console.log("Deleting node_modules for " + engine);
         fs.rmSync(`../${engine}/node_modules`, { recursive: true, force: true });
