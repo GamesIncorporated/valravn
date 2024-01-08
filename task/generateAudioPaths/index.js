@@ -94,7 +94,7 @@ const generateJson = (files, jsonFilePath) => {
     const changedFilePath = jsonFilePath.replaceAll("\\", "/").split("/").splice(6, 2).join("/");
     const configFilePath = jsonFilePath.replaceAll("\\", "/").split("/").splice(6, 3).join("/");
 
-    const filePath = `../../../../../../assets/en/audio/${changedFilePath}/`;
+    const filePath = `assets/en/audio/${changedFilePath}/`;
     const configPath = `./json/web/audio/audio-definitions/${configFilePath}$(ver)`
     
     globalFiles.push(configPath);
@@ -106,7 +106,7 @@ const generateJson = (files, jsonFilePath) => {
     }
     return {
         group: "default",
-        path: filePath,
+        audioPath: filePath,
         audio: fileData
     };
 }
